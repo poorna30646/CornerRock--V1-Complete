@@ -1,0 +1,23 @@
+[
+  {
+    "id": "t1",
+    "name": "Amara Chen",
+    "role": "Founder",
+    "company": "Local restaurant group",
+    "quote": "Our booking process finally feels as good as our food. Fewer no-shows and way less back-and-forth on the phone."
+  },
+  {
+    "id": "t2",
+    "name": "Daniel Osei",
+    "role": "Practice Manager",
+    "company": "Family dental clinic",
+    "quote": "Patients book online now instead of calling. Our front desk finally has room to breathe during busy hours."
+  },
+  {
+    "id": "t3",
+    "name": "Priya Nair",
+    "role": "Co-founder",
+    "company": "Early-stage startup",
+    "quote": "They shipped our MVP fast without cutting corners on quality. We could actually show it to investors with confidence."
+  }
+]

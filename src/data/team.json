@@ -1,0 +1,26 @@
+[
+  {
+    "id": "team-1",
+    "name": "Alex Morgan",
+    "role": "Founder & Senior Engineer",
+    "bio": "10+ years building scalable products at startups and tech companies. Loves clean code and shipping fast."
+  },
+  {
+    "id": "team-2",
+    "name": "Jordan Chen",
+    "role": "Design Lead",
+    "bio": "Passionate about creating user-centered experiences. Previously led design at three early-stage companies."
+  },
+  {
+    "id": "team-3",
+    "name": "Sam Patel",
+    "role": "Full Stack Engineer",
+    "bio": "Specializes in Next.js, Node.js, and cloud infrastructure. Committed to shipping production-grade code."
+  },
+  {
+    "id": "team-4",
+    "name": "Casey Rodriguez",
+    "role": "Product Manager",
+    "bio": "Brings 8 years of PM experience from fintech and SaaS. Focused on shipping what customers actually need."
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "faq-1",
+    "question": "How long does a typical project take?",
+    "answer": "Most websites take 2–4 weeks and most apps take 6–12 weeks, depending on scope. We'll give you a clear timeline after our first discovery call."
+  },
+  {
+    "id": "faq-2",
+    "question": "What does it cost to work with Corner Rock?",
+    "answer": "Every project is scoped individually based on features and complexity. Reach out through the contact form and we'll send a tailored estimate."
+  },
+  {
+    "id": "faq-3",
+    "question": "Do you offer support after launch?",
+    "answer": "Yes. Every project includes a maintenance and support plan so your software stays fast, secure, and up to date after it goes live."
+  },
+  {
+    "id": "faq-4",
+    "question": "Will I own the code and the final product?",
+    "answer": "Yes, full ownership of the source code and your data is yours once the project is delivered — no lock-in."
+  },
+  {
+    "id": "faq-5",
+    "question": "Can you work with our existing team or systems?",
+    "answer": "Yes. We regularly integrate with existing tools, APIs, and in-house teams rather than replacing everything from scratch."
+  }
+]

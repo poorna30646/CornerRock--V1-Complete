@@ -1,0 +1,38 @@
+[
+  {
+    "id": "apex-forge-gym",
+    "title": "Apex Forge - Luxury Fitness",
+    "description": "Premium luxury gym with membership tiers, elite trainers, BMI calculator, personalized nutrition plans, and transformation gallery. Built for high-end fitness experience.",
+    "image": "/portfolio/placeholder-1.svg",
+    "technology": ["Next.js", "TypeScript", "Tailwind CSS", "React", "Interactive Forms"],
+    "demoUrl": "https://poorna30646.github.io/gym-web-PC-Agencies/",
+    "githubUrl": "#"
+  },
+  {
+    "id": "freshroots-grocery",
+    "title": "FreshRoots - Organic Grocery Delivery",
+    "description": "Farm-to-table organic grocery delivery platform with cart management, flash deals countdown, real-time delivery tracking, and eco-friendly packaging options.",
+    "image": "/portfolio/placeholder-2.svg",
+    "technology": ["Next.js", "TypeScript", "Shopping Cart", "Tailwind CSS", "React"],
+    "demoUrl": "https://poorna30646.github.io/grocery-store-PCAgencies/",
+    "githubUrl": "#"
+  },
+  {
+    "id": "etoile-restaurant",
+    "title": "Étoile - Michelin-Starred Fine Dining",
+    "description": "Fine dining restaurant website with seasonal tasting menus, chef biography, wine pairings, gallery, and reservation system. Premium culinary experience.",
+    "image": "/portfolio/placeholder-3.svg",
+    "technology": ["Next.js", "TypeScript", "Tailwind CSS", "Reservation System", "React"],
+    "demoUrl": "https://poorna30646.github.io/Restaurent-PC-Agencies/",
+    "githubUrl": "#"
+  },
+  {
+    "id": "elite-dental-studio",
+    "title": "Elite Dental Studio - Premium Dentistry",
+    "description": "Dental clinic website with service listings, before/after gallery, doctor profiles, appointment booking system, and insurance provider integration.",
+    "image": "/portfolio/placeholder-4.svg",
+    "technology": ["Next.js", "TypeScript", "Booking System", "Tailwind CSS", "React"],
+    "demoUrl": "https://poorna30646.github.io/denata-clinic-PCAgencies/",
+    "githubUrl": "#"
+  }
+]
