@@ -11,11 +11,13 @@ export interface Service {
 export interface PortfolioItem {
   id: string;
   title: string;
+  category: string;
+  status: string;
   description: string;
   image: string;
   technology: string[];
+  caseStudyUrl?: string;
   demoUrl?: string;
-  githubUrl?: string;
 }
 
 export interface Testimonial {

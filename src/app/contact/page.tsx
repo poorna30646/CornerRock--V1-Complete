@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { WhatsAppContactSection } from "@/components/contact/whatsapp-widget";
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/shared/fade-in";
+import { SocialLinks } from "@/components/shared/social-links";
 import { siteConfig } from "@/constants/site";
 
 export const metadata: Metadata = {
@@ -68,6 +69,18 @@ export default function Contact() {
               </div>
             </FadeIn>
           </div>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-8 rounded-2xl border border-dark/10 bg-white p-6 text-center">
+              <h3 className="font-semibold text-dark">Follow us</h3>
+              <p className="mt-2 text-sm text-gray">
+                Stay connected for product updates and latest work.
+              </p>
+              <div className="mt-6 flex justify-center">
+                <SocialLinks />
+              </div>
+            </div>
+          </FadeIn>
         </Container>
       </section>
     </>

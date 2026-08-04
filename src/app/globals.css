@@ -18,7 +18,7 @@
   --color-gray: #64748b;
 
   /* Fonts */
-  --font-sans: var(--font-inter);
+  --font-sans: Inter, "Segoe UI", Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

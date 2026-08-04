@@ -7,39 +7,58 @@ import {
   sendClientConfirmationEmail,
 } from "@/lib/email";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
-    // Parse the request body
     const body = await request.json();
+    const result = contactFormSchema.safeParse(body);
 
-    // Validate the data with Zod
-    const validatedData = contactFormSchema.parse(body);
-
-    // Connect to MongoDB
-    await connectToDatabase();
-
-    // Save to database
-    const contact = new Contact(validatedData);
-    await contact.save();
-
-    // Send company notification email
-    try {
-      await sendCompanyNotificationEmail(validatedData);
-    } catch (emailError) {
-      console.error("Company email failed:", emailError);
-      // Don't fail the whole request if email fails
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Validation failed",
+          errors: result.error.issues,
+        },
+        { status: 400 }
+      );
     }
 
-    // Send client confirmation email
+    const validatedData = result.data;
+
     try {
+      await connectToDatabase();
+
+      const contact = new Contact(validatedData);
+      await contact.save();
+    } catch (databaseError) {
+      console.error("Contact database save failed:", databaseError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unable to save your inquiry. Please try again later.",
+        },
+        { status: 500 }
+      );
+    }
+
+    try {
+      await sendCompanyNotificationEmail(validatedData);
       await sendClientConfirmationEmail({
         name: validatedData.name,
         email: validatedData.email,
         service: validatedData.service,
       });
     } catch (emailError) {
-      console.error("Client email failed:", emailError);
-      // Don't fail the whole request if email fails
+      console.error("Contact email failed:", emailError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Your inquiry was saved, but email notification failed.",
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
@@ -51,25 +70,11 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    // Handle Zod validation errors
     if (error instanceof Error) {
-      if (error.name === "ZodError") {
-        const zodError = error as unknown as {
-          errors: Array<{ path: string; message: string }>;
-        };
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Validation failed",
-            errors: zodError.errors,
-          },
-          { status: 400 }
-        );
-      }
       return NextResponse.json(
         {
           success: false,
-          message: error.message,
+          message: "Unable to submit your inquiry right now.",
         },
         { status: 500 }
       );

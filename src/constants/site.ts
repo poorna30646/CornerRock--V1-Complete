@@ -1,14 +1,34 @@
+export const socialLinks = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/138464137",
+    icon: "linkedin",
+  },
+  {
+    label: "GitHub",
+    href: "https://github.com/CornerRock-Tech",
+    icon: "github",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/cornerrock.tech?igsh=MWU2NmZ5anJuMXVrbg==",
+    icon: "instagram",
+  },
+] as const;
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cornerrock.tech";
+
 export const siteConfig = {
   name: "Corner Rock",
   tagline: "Building Software That Grows Businesses.",
   description:
     "Corner Rock helps startups, businesses, and enterprises grow using modern software solutions — websites, mobile apps, automation, and AI.",
-  url: "https://cornerrock.com", // TODO: replace with the real production domain
+  url: siteUrl,
   ogImage: "/og-image.png",
   links: {
-    // TODO: add real social links when available
+    social: socialLinks,
   },
-  contactEmail: "hello@cornerrock.com", // TODO: replace with real inbox
+  contactEmail: "cornerrock.tech@gmail.com",
 } as const;
 
 export const navLinks = [
@@ -20,15 +40,18 @@ export const navLinks = [
 ] as const;
 
 export const footerLinks = {
-  company: [
+  primary: [
+    { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
     { label: "Portfolio", href: "/portfolio" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms & Conditions", href: "/terms" },
     { label: "Contact", href: "/contact" },
   ],
-  legal: [
-    { label: "Privacy Policy", href: "/privacy-policy" },
-    { label: "Terms", href: "/terms" },
+  social: [
+    ...socialLinks.map(({ label, href }) => ({ label, href })),
+    { label: "Email", href: `mailto:${siteConfig.contactEmail}` },
   ],
 } as const;
 

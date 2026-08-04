@@ -1,38 +1,46 @@
 [
   {
-    "id": "apex-forge-gym",
-    "title": "Apex Forge - Luxury Fitness",
-    "description": "Premium luxury gym with membership tiers, elite trainers, BMI calculator, personalized nutrition plans, and transformation gallery. Built for high-end fitness experience.",
-    "image": "/portfolio/placeholder-1.svg",
-    "technology": ["Next.js", "TypeScript", "Tailwind CSS", "React", "Interactive Forms"],
-    "demoUrl": "https://poorna30646.github.io/gym-web-PC-Agencies/",
-    "githubUrl": "#"
+    "id": "luxury-gym-website",
+    "title": "Luxury Gym Website",
+    "category": "Fitness",
+    "status": "Concept Project",
+    "description": "A premium fitness platform featuring memberships, trainer profiles, transformation gallery, BMI calculator and personal coaching.",
+    "image": "https://res.cloudinary.com/dqpjyytx5/image/upload/v1785558547/gym_gmeopg.png",
+    "technology": ["Next.js", "React", "Tailwind CSS", "TypeScript", "Framer Motion"],
+    "caseStudyUrl": "/portfolio#luxury-gym-website",
+    "demoUrl": "https://poorna30646.github.io/gym-web-PC-Agencies/"
   },
   {
-    "id": "freshroots-grocery",
-    "title": "FreshRoots - Organic Grocery Delivery",
-    "description": "Farm-to-table organic grocery delivery platform with cart management, flash deals countdown, real-time delivery tracking, and eco-friendly packaging options.",
-    "image": "/portfolio/placeholder-2.svg",
-    "technology": ["Next.js", "TypeScript", "Shopping Cart", "Tailwind CSS", "React"],
-    "demoUrl": "https://poorna30646.github.io/grocery-store-PCAgencies/",
-    "githubUrl": "#"
+    "id": "luxury-restaurant-website",
+    "title": "Luxury Restaurant Website",
+    "category": "Restaurant",
+    "status": "Concept Project",
+    "description": "Fine dining experience featuring online reservations, chef showcase, seasonal menu, wine pairing and elegant customer experience.",
+    "image": "https://res.cloudinary.com/dqpjyytx5/image/upload/v1785559134/restarunt_rspv63.png",
+    "technology": ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    "caseStudyUrl": "/portfolio#luxury-restaurant-website",
+    "demoUrl": "https://poorna30646.github.io/Restaurent-PC-Agencies/"
   },
   {
-    "id": "etoile-restaurant",
-    "title": "Étoile - Michelin-Starred Fine Dining",
-    "description": "Fine dining restaurant website with seasonal tasting menus, chef biography, wine pairings, gallery, and reservation system. Premium culinary experience.",
-    "image": "/portfolio/placeholder-3.svg",
-    "technology": ["Next.js", "TypeScript", "Tailwind CSS", "Reservation System", "React"],
-    "demoUrl": "https://poorna30646.github.io/Restaurent-PC-Agencies/",
-    "githubUrl": "#"
+    "id": "elite-dental-clinic-website",
+    "title": "Elite Dental Clinic Website",
+    "category": "Healthcare",
+    "status": "Concept Project",
+    "description": "Modern dental clinic platform including appointment booking, doctor profiles, treatment pages and patient management.",
+    "image": "https://res.cloudinary.com/dqpjyytx5/image/upload/v1785558562/dental_axqmn6.png",
+    "technology": ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    "caseStudyUrl": "/portfolio#elite-dental-clinic-website",
+    "demoUrl": "https://poorna30646.github.io/denata-clinic-PCAgencies/"
   },
   {
-    "id": "elite-dental-studio",
-    "title": "Elite Dental Studio - Premium Dentistry",
-    "description": "Dental clinic website with service listings, before/after gallery, doctor profiles, appointment booking system, and insurance provider integration.",
-    "image": "/portfolio/placeholder-4.svg",
-    "technology": ["Next.js", "TypeScript", "Booking System", "Tailwind CSS", "React"],
-    "demoUrl": "https://poorna30646.github.io/denata-clinic-PCAgencies/",
-    "githubUrl": "#"
+    "id": "luxury-real-estate-website",
+    "title": "Luxury Real Estate Website",
+    "category": "Real Estate",
+    "status": "Concept Project",
+    "description": "Luxury property showcase with interactive listings, featured homes, virtual tours, advanced search and premium property management.",
+    "image": "https://res.cloudinary.com/dqpjyytx5/image/upload/v1785559148/realestate_aozhx6.png",
+    "technology": ["Next.js", "React", "Tailwind CSS"],
+    "caseStudyUrl": "/portfolio#luxury-real-estate-website",
+    "demoUrl": "https://poorna30646.github.io/real-estate-PA/"
   }
 ]

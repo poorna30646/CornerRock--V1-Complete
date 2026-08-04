@@ -1,15 +1,50 @@
 import nodemailer from "nodemailer";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
-// Create a transporter instance
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+function getRequiredEmailConfig() {
+  const {
+    SMTP_HOST,
+    SMTP_PORT = "587",
+    SMTP_USER,
+    SMTP_PASSWORD,
+    COMPANY_NOTIFICATION_EMAIL,
+  } = process.env;
+
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD || !COMPANY_NOTIFICATION_EMAIL) {
+    throw new Error("SMTP environment variables are not configured");
+  }
+
+  return {
+    host: SMTP_HOST,
+    port: parseInt(SMTP_PORT, 10),
+    user: SMTP_USER,
+    password: SMTP_PASSWORD,
+    companyNotificationEmail: COMPANY_NOTIFICATION_EMAIL,
+  };
+}
+
+function createTransporter() {
+  const config = getRequiredEmailConfig();
+
+  return nodemailer.createTransport({
+    host: config.host,
+    port: config.port,
+    secure: config.port === 465,
+    auth: {
+      user: config.user,
+      pass: config.password,
+    },
+  } satisfies SMTPTransport.Options);
+}
+
+export function isEmailConfigured() {
+  return Boolean(
+    process.env.SMTP_HOST &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASSWORD &&
+      process.env.COMPANY_NOTIFICATION_EMAIL
+  );
+}
 
 /**
  * Send a notification email to the company when a new lead is received
@@ -24,6 +59,10 @@ export async function sendCompanyNotificationEmail(data: {
   timeline: string;
   message: string;
 }) {
+  if (!isEmailConfigured()) {
+    return { success: true, skipped: true };
+  }
+
   const subject = `New Lead Received: ${data.company}`;
 
   const htmlContent = `
@@ -53,9 +92,12 @@ export async function sendCompanyNotificationEmail(data: {
   `;
 
   try {
+    const transporter = createTransporter();
+    const config = getRequiredEmailConfig();
+
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.COMPANY_NOTIFICATION_EMAIL,
+      from: config.user,
+      to: config.companyNotificationEmail,
       subject,
       html: htmlContent,
       replyTo: data.email,
@@ -75,6 +117,10 @@ export async function sendClientConfirmationEmail(data: {
   email: string;
   service: string;
 }) {
+  if (!isEmailConfigured()) {
+    return { success: true, skipped: true };
+  }
+
   const subject = `Thank you for contacting Corner Rock`;
 
   const htmlContent = `
@@ -104,8 +150,11 @@ export async function sendClientConfirmationEmail(data: {
   `;
 
   try {
+    const transporter = createTransporter();
+    const config = getRequiredEmailConfig();
+
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: config.user,
       to: data.email,
       subject,
       html: htmlContent,

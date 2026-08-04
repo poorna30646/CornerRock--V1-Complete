@@ -6,7 +6,7 @@ import { siteConfig } from "@/constants/site";
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: `View ${siteConfig.name}'s portfolio of real projects across different industries — gyms, restaurants, grocery delivery, clinics, and more.`,
+  description: `View ${siteConfig.name}'s portfolio of modern software solutions across web apps, mobile apps, AI, business, healthcare, restaurant, and education projects.`,
 };
 
 export default function Portfolio() {
