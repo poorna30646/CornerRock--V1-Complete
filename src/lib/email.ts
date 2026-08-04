@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
 function getRequiredEmailConfig() {
+  console.log("[email] Checking email environment configuration...");
   const {
     SMTP_HOST,
     SMTP_PORT = "587",
@@ -10,8 +11,15 @@ function getRequiredEmailConfig() {
     COMPANY_NOTIFICATION_EMAIL,
   } = process.env;
 
+  console.log("[email] SMTP host configured:", Boolean(SMTP_HOST));
+  console.log("[email] SMTP user configured:", Boolean(SMTP_USER));
+  console.log("[email] SMTP password configured:", Boolean(SMTP_PASSWORD));
+  console.log("[email] Notification email configured:", Boolean(COMPANY_NOTIFICATION_EMAIL));
+
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD || !COMPANY_NOTIFICATION_EMAIL) {
-    throw new Error("SMTP environment variables are not configured");
+    const error = new Error("SMTP environment variables are not configured");
+    console.error("[email] Missing SMTP environment variables:", error);
+    throw error;
   }
 
   return {
@@ -63,6 +71,7 @@ export async function sendCompanyNotificationEmail(data: {
     return { success: true, skipped: true };
   }
 
+  console.log("[email] Preparing company notification email for:", data.email);
   const subject = `New Lead Received: ${data.company}`;
 
   const htmlContent = `
@@ -95,6 +104,7 @@ export async function sendCompanyNotificationEmail(data: {
     const transporter = createTransporter();
     const config = getRequiredEmailConfig();
 
+    console.log("[email] Sending company notification email...");
     await transporter.sendMail({
       from: config.user,
       to: config.companyNotificationEmail,
@@ -102,9 +112,10 @@ export async function sendCompanyNotificationEmail(data: {
       html: htmlContent,
       replyTo: data.email,
     });
+    console.log("[email] Company notification email sent successfully.");
     return { success: true };
   } catch (error) {
-    console.error("Failed to send company notification:", error);
+    console.error("[email] Failed to send company notification with full error:", error);
     throw error;
   }
 }
@@ -121,6 +132,7 @@ export async function sendClientConfirmationEmail(data: {
     return { success: true, skipped: true };
   }
 
+  console.log("[email] Preparing client confirmation email for:", data.email);
   const subject = `Thank you for contacting Corner Rock`;
 
   const htmlContent = `
@@ -153,15 +165,17 @@ export async function sendClientConfirmationEmail(data: {
     const transporter = createTransporter();
     const config = getRequiredEmailConfig();
 
+    console.log("[email] Sending client confirmation email...");
     await transporter.sendMail({
       from: config.user,
       to: data.email,
       subject,
       html: htmlContent,
     });
+    console.log("[email] Client confirmation email sent successfully.");
     return { success: true };
   } catch (error) {
-    console.error("Failed to send client confirmation:", error);
+    console.error("[email] Failed to send client confirmation with full error:", error);
     throw error;
   }
 }

@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 export type ContactStatus = "new" | "contacted" | "in-progress" | "closed";
 
+console.log("[model] Initializing Contact model...");
+
 const contactSchema = new mongoose.Schema(
   {
     name: {
@@ -60,3 +62,5 @@ const contactSchema = new mongoose.Schema(
 export const Contact =
   mongoose.models.Contact ||
   mongoose.model("Contact", contactSchema);
+
+console.log("[model] Contact model is ready for use.");
