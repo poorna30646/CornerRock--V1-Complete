@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { contactFormSchema } from "@/lib/validations";
 import { connectToDatabase } from "@/lib/db";
 import { Contact } from "@/models/contact";
@@ -9,78 +10,114 @@ import {
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
-  try {
-    console.log("[contact] Received new contact submission request.");
+function getSafeErrorMetadata(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return { errorName: "UnknownError" };
+  }
 
-    const body = await request.json();
-    console.log("[contact] Request body received:", {
-      name: body?.name,
-      email: body?.email,
-      company: body?.company,
-      service: body?.service,
-    });
+  const { name, code } = error as { name?: unknown; code?: unknown };
+  const metadata: { errorName: string; code?: string | number } = {
+    errorName: typeof name === "string" ? name : "UnknownError",
+  };
+
+  if (typeof code === "string" || typeof code === "number") {
+    metadata.code = code;
+  }
+
+  return metadata;
+}
+
+export async function POST(request: NextRequest) {
+  const requestId = randomUUID();
+
+  let body: unknown;
+
+  try {
+    body = await request.json();
+  } catch {
+    console.warn("[contact] Invalid JSON request body.", { requestId });
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Please submit a valid contact form.",
+      },
+      { status: 400 }
+    );
+  }
+
+  try {
+    console.info("[contact] Processing contact submission.", { requestId });
 
     const result = contactFormSchema.safeParse(body);
 
     if (!result.success) {
-      console.error("[contact] Validation failed:", result.error.issues);
+      console.warn("[contact] Contact validation failed.", {
+        requestId,
+        invalidFields: result.error.issues
+          .map((issue) => issue.path.join("."))
+          .filter(Boolean),
+      });
       return NextResponse.json(
         {
           success: false,
-          message: "Validation failed",
-          errors: result.error.issues,
+          message: "Please correct the highlighted fields and try again.",
+          errors: result.error.issues.map((issue) => ({
+            field: issue.path.join("."),
+            message: issue.message,
+          })),
         },
         { status: 400 }
       );
     }
 
     const validatedData = result.data;
-    console.log("[contact] Payload validated successfully.");
+    console.info("[contact] Contact payload validated.", { requestId });
 
     try {
-      console.log("[contact] Connecting to MongoDB before saving the contact...");
+      console.info("[contact] Saving contact document.", { requestId });
       await connectToDatabase();
 
-      console.log("[contact] Saving contact to MongoDB...");
       const contact = new Contact(validatedData);
       await contact.save();
-      console.log("[contact] Contact saved successfully.");
+      console.info("[contact] Contact document saved.", { requestId });
     } catch (databaseError) {
-      console.error("[contact] Contact database save failed with full error:", databaseError);
+      console.error("[contact] Contact database save failed.", {
+        requestId,
+        ...getSafeErrorMetadata(databaseError),
+      });
       return NextResponse.json(
         {
           success: false,
-          message:
-            databaseError instanceof Error
-              ? databaseError.message
-              : "Unable to save your inquiry. Please try again later.",
-          error: databaseError,
+          message: "Unable to submit your inquiry. Please try again later.",
         },
         { status: 500 }
       );
     }
 
     try {
-      console.log("[contact] Sending company notification email...");
+      console.info("[contact] Sending company notification email.", {
+        requestId,
+      });
       await sendCompanyNotificationEmail(validatedData);
-      console.log("[contact] Sending client confirmation email...");
+      console.info("[contact] Sending client confirmation email.", {
+        requestId,
+      });
       await sendClientConfirmationEmail({
         name: validatedData.name,
         email: validatedData.email,
         service: validatedData.service,
       });
-      console.log("[contact] Emails sent successfully.");
+      console.info("[contact] Contact emails sent.", { requestId });
     } catch (emailError) {
-      console.error("[contact] Contact email failed with full error:", emailError);
+      console.error("[contact] Contact email delivery failed after save.", {
+        requestId,
+        ...getSafeErrorMetadata(emailError),
+      });
       return NextResponse.json(
         {
           success: false,
           message:
-            emailError instanceof Error
-              ? emailError.message
-              : "Your inquiry was saved, but email notification failed.",
-          error: emailError,
+            "Your inquiry was received, but we could not complete the email confirmation. Please try again later or contact us directly.",
         },
         { status: 500 }
       );
@@ -95,23 +132,14 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("[contact] Unexpected contact submission failure:", error);
-    if (error instanceof Error) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: error.message,
-          error,
-        },
-        { status: 500 }
-      );
-    }
-
+    console.error("[contact] Unexpected contact submission failure.", {
+      requestId,
+      ...getSafeErrorMetadata(error),
+    });
     return NextResponse.json(
       {
         success: false,
-        message: "An unexpected error occurred",
-        error,
+        message: "Unable to submit your inquiry. Please try again later.",
       },
       { status: 500 }
     );

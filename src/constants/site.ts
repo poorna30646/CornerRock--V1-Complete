@@ -16,7 +16,9 @@ export const socialLinks = [
   },
 ] as const;
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cornerrock.tech";
+// Keep local development valid without claiming a custom production domain.
+// Configure the active Amplify URL (and later the custom domain) at build time.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const siteConfig = {
   name: "Corner Rock",

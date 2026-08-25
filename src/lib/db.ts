@@ -18,46 +18,69 @@ if (!globalWithMongoose.mongooseCache) {
   globalWithMongoose.mongooseCache = cached;
 }
 
-export async function connectToDatabase() {
-  console.log("[db] Attempting to connect to MongoDB...");
-  console.log("[db] Current MongoDB connection state:", mongoose.connection.readyState);
+function getSafeErrorMetadata(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return { errorName: "UnknownError" };
+  }
 
-  const mongoUri = process.env.MONGODB_URI;
-  console.log("[db] MONGODB_URI configured:", Boolean(mongoUri));
+  const { name, code } = error as { name?: unknown; code?: unknown };
+  const metadata: { errorName: string; code?: string | number } = {
+    errorName: typeof name === "string" ? name : "UnknownError",
+  };
+
+  if (typeof code === "string" || typeof code === "number") {
+    metadata.code = code;
+  }
+
+  return metadata;
+}
+
+export async function connectToDatabase(): Promise<typeof mongoose> {
+  const mongoUri = process.env.MONGODB_URI?.trim();
+
+  console.info("[db] MONGODB_URI configured:", Boolean(mongoUri));
 
   if (!mongoUri) {
-    const error = new Error("MONGODB_URI environment variable is not set");
-    console.error("[db] Missing MONGODB_URI environment variable", error);
-    throw error;
+    console.error("[db] MONGODB_URI environment variable is not configured.");
+    throw new Error("MONGODB_URI environment variable is not set");
   }
 
   if (cached.conn?.connection?.readyState === 1) {
-    console.log("[db] Reusing existing MongoDB connection.");
+    console.info("[db] Reusing cached MongoDB connection.");
+    return cached.conn;
+  }
+
+  if (mongoose.connection.readyState === 1) {
+    cached.conn = mongoose;
+    console.info("[db] Reusing active MongoDB connection.");
     return cached.conn;
   }
 
   if (cached.promise) {
-    console.log("[db] MongoDB connection is already in progress. Waiting for it...");
+    console.info("[db] Waiting for an in-progress MongoDB connection.");
     return cached.promise;
   }
 
+  cached.conn = null;
+
   try {
+    console.info("[db] Connecting to MongoDB.");
     cached.promise = mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 10000,
       connectTimeoutMS: 10000,
-      maxPoolSize: 10,
+      maxPoolSize: 5,
       bufferCommands: false,
     });
 
     const connection = await cached.promise;
     cached.conn = connection;
-    console.log("[db] MongoDB connected successfully.");
-    console.log("[db] Final MongoDB connection state:", mongoose.connection.readyState);
+    console.info("[db] MongoDB connected successfully.");
     return connection;
   } catch (error) {
-    console.error("[db] MongoDB connection failed with full error:", error);
+    console.error("[db] MongoDB connection failed.", getSafeErrorMetadata(error));
     cached.conn = null;
-    cached.promise = null;
     throw error;
+  } finally {
+    cached.promise = null;
   }
 }
